@@ -96,24 +96,21 @@ class IPLookupPlugin(Star):
 
 
 
-    @filter.regex(r"^ip\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})")
+    @filter.regex(r"^ip\s+([\d.:a-fA-F]+)")
     async def query_ip(self, event: AstrMessageEvent):
         """查询指定IP的归属地"""
         try:
             # 从消息内容中提取IP地址
             import re
-            pattern = r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
-            message = event.get_messages()
-            key_command = str(message[0])
-            match = re.search(pattern, key_command)
+            match = re.match(r"^ip\s+([\d.:a-fA-F]+)", str(event.get_messages()[0]))
             if not match:
                 yield event.plain_result("❌ 请输入有效的IP地址格式: ip [IP地址]")
                 return
             ip = match.group(1)
             
-            # 验证IP格式（简化验证）
+            # 验证IP格式（支持IPv4和IPv6）
             if not self._is_valid_ip(ip):
-                yield event.plain_result("❌ 请输入有效的IP地址")
+                yield event.plain_result("❌ 请输入有效的IPv4或IPv6地址")
                 return
             
             yield event.plain_result(f"🔍 正在查询IP {ip} 的信息...")
@@ -139,7 +136,10 @@ class IPLookupPlugin(Star):
             yield event.plain_result("❌ 查询时出现错误")
 
     def _is_valid_ip(self, ip: str) -> bool:
-        """验证IP地址格式"""
-        import re
-        pattern = r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
-        return bool(re.match(pattern, ip))
+        """验证IP地址格式（支持IPv4和IPv6）"""
+        import ipaddress
+        try:
+            ipaddress.ip_address(ip)
+            return True
+        except ValueError:
+            return False

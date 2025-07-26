@@ -1,7 +1,7 @@
 name: ip_location
 version: 1.2.0
 author: cloudcranesss
-description: 精简版IP归属地查询插件
+description: 精简版IP归属地查询插件，支持IPv4/IPv6地址查询
 desc: 简洁的IP归属地查询插件，支持指定IP查询
 main: main.py
 tags:

@@ -119,8 +119,6 @@ ip 2001:4860:4860::8888
 ## 🤝 支持与反馈
 
 - **GitHub Issues**: [提交问题](https://github.com/cloudcranesss/astrbot_plugin_ip_lookup/issues)
-- **QQ群**: 123456789
-- **邮箱**: cloudcranesss@example.com
 
 ## 📄 许可证
 
@@ -128,7 +126,7 @@ ip 2001:4860:4860::8888
 
 ## 🙏 致谢
 
-- 感谢ip-api.com、ipapi.co等提供的免费API服务
+- 感谢52vmy.cn和vvhan.com提供的免费API服务
 - 感谢AstrBot框架提供的优秀插件系统
 - 感谢所有贡献者和用户的支持
 

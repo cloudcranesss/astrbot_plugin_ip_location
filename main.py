@@ -123,7 +123,7 @@ class IPLookupPlugin(Star):
                 "  ip 状态 - 查看插件状态"
             )
 
-    @ip_group.regex(r"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$")
+    @ip_group.command("查询")
     async def query_ip(self, event: AstrMessageEvent):
         """查询指定IP的归属地"""
         try:

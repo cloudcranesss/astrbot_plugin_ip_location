@@ -66,8 +66,7 @@ class IPLookupPlugin(Star):
                             "city": data.get("city", "未知"),
                             "isp": data.get("isp", "未知"),
                             "lat": float(data.get("latitude", 0)),
-                            "lon": float(data.get("longitude", 0)),
-                            "timezone": "未知"
+                            "lon": float(data.get("longitude", 0))
                         }
 
             # vvhan.com API
@@ -84,8 +83,7 @@ class IPLookupPlugin(Star):
                             "city": info.get("city", "未知"),
                             "isp": info.get("isp", "未知"),
                             "lat": 0,
-                            "lon": 0,
-                            "timezone": "未知"
+                            "lon": 0
                         }
                         
         except asyncio.TimeoutError:
@@ -133,7 +131,6 @@ class IPLookupPlugin(Star):
                     f"🏙️ 城市：{info['city']}\n"
                     f"🏢 ISP：{info['isp']}\n"
                     f"📍 坐标：{info['lat']}, {info['lon']}\n"
-                    f"🕐 时区：{info['timezone']}"
                 )
                 yield event.plain_result(result)
             else:

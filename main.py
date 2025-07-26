@@ -97,27 +97,12 @@ class IPLookupPlugin(Star):
 
 
 
-    @filter.command_group("ip")
-    async def ip_group(self, event: AstrMessageEvent):
-        """IP查询命令组"""
-        if not event.message_str.strip():
-            yield event.plain_result(
-                "🌐 IP查询插件命令:\n"
-                "  ip 查询 [IP地址] - 查询指定IP的归属地\n"
-                "  ip 状态 - 查看插件状态"
-            )
-
-    @ip_group.command("查询")
+    @filter.regex(r"^ip\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})")
     async def query_ip(self, event: AstrMessageEvent):
         """查询指定IP的归属地"""
         try:
-            # 获取IP地址
-            parts = event.message_str.strip().split()
-            if len(parts) < 3:
-                yield event.plain_result("❌ 请提供IP地址，格式：ip 查询 8.8.8.8")
-                return
-            
-            ip = parts[2]
+            # 从正则匹配中获取IP地址
+            ip = event.regex_match.group(1)
             
             # 验证IP格式（简化验证）
             if not self._is_valid_ip(ip):
@@ -145,20 +130,6 @@ class IPLookupPlugin(Star):
         except Exception as e:
             logger.error(f"查询IP异常: {e}")
             yield event.plain_result("❌ 查询时出现错误")
-
-
-
-    @ip_group.command("状态")
-    async def check_plugin_status(self, event: AstrMessageEvent):
-        """检查插件状态"""
-        status = (
-            "📊 IP查询插件状态:\n"
-            f"API数量: {len(self.api_urls)}\n"
-            f"会话状态: {'活跃' if not self.session.closed else '已关闭'}\n"
-            f"超时设置: {self.timeout.total}秒\n"
-            f"支持命令: ip 查询, ip 状态"
-        )
-        yield event.plain_result(status)
 
     def _is_valid_ip(self, ip: str) -> bool:
         """验证IP地址格式"""

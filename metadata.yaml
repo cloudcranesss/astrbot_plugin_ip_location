@@ -1,0 +1,24 @@
+name: ip_location
+version: 1.2.0
+author: cloudcranesss
+description: 优化版IP归属地查询插件，支持真实客户端IP获取和增强错误处理
+desc: 多源IP归属地查询插件，支持智能故障转移和详细地理位置信息
+main: main.py
+tags:
+  - 工具
+  - IP查询
+  - 地理位置
+  - 网络工具
+requirements:
+  - aiohttp>=3.8.0
+metadata:
+  name: IP归属地查询
+  description: 查询IP地址的地理位置信息，支持多API备份查询
+  version: 1.0.0
+  author: cloudcranesss
+  homepage: https://github.com/cloudcranesss/astrbot_plugin_ip_lookup
+  help: |
+    使用命令：
+    ip 查询 [IP地址] - 查询指定IP的归属地
+    ip 我的 - 查询当前IP的归属地  
+    ip 状态 - 查看插件状态

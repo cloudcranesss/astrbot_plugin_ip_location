@@ -1,13 +1,12 @@
 from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
-from astrbot.api.message_components import Plain
 import aiohttp
 import asyncio
 from typing import Optional, Dict, Any
 
 
-@register("IP地理位置查询", "cloudcranesss", "优化版IP归属地查询插件，支持真实客户端IP获取", "1.2.0",
+@register("IP地理位置查询", "cloudcranesss", "精简版IP归属地查询插件", "1.2.0",
           "https://github.com/cloudcranesss/astrbot_plugin_ip_location")
 class IPLookupPlugin(Star):
     """IP归属地查询插件"""
@@ -101,8 +100,16 @@ class IPLookupPlugin(Star):
     async def query_ip(self, event: AstrMessageEvent):
         """查询指定IP的归属地"""
         try:
-            # 从正则匹配中获取IP地址
-            ip = event.regex_match.group(1)
+            # 从消息内容中提取IP地址
+            import re
+            pattern = r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+            message = event.get_messages()
+            key_command = str(message[0])
+            match = re.search(pattern, key_command)
+            if not match:
+                yield event.plain_result("❌ 请输入有效的IP地址格式: ip [IP地址]")
+                return
+            ip = match.group(1)
             
             # 验证IP格式（简化验证）
             if not self._is_valid_ip(ip):

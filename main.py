@@ -95,22 +95,7 @@ class IPLookupPlugin(Star):
         
         return None
 
-    def _get_client_ip(self, event: AstrMessageEvent) -> str:
-        """获取客户端真实IP"""
-        try:
-            # 从事件上下文中获取真实IP
-            context = event.context
-            if hasattr(context, 'source') and context.source:
-                # 尝试从消息源获取IP
-                source = context.source
-                if hasattr(source, 'user_id') and source.user_id:
-                    # 这里应该实现从用户会话或配置中获取IP的逻辑
-                    # 由于AstrBot框架限制，暂时返回一个示例IP
-                    # 实际部署时可以通过配置文件或数据库获取
-                    return "223.5.5.5"  # 阿里云DNS作为示例
-            return "114.114.114.114"  # 114DNS作为默认
-        except Exception:
-            return "8.8.8.8"  # Google DNS作为最后备选
+
 
     @filter.command_group("ip")
     async def ip_group(self, event: AstrMessageEvent):
@@ -119,7 +104,6 @@ class IPLookupPlugin(Star):
             yield event.plain_result(
                 "🌐 IP查询插件命令:\n"
                 "  ip 查询 [IP地址] - 查询指定IP的归属地\n"
-                "  ip 我的 - 查询当前IP的归属地\n"
                 "  ip 状态 - 查看插件状态"
             )
 
@@ -162,34 +146,7 @@ class IPLookupPlugin(Star):
             logger.error(f"查询IP异常: {e}")
             yield event.plain_result("❌ 查询时出现错误")
 
-    @ip_group.command("我的")
-    async def query_my_ip(self, event: AstrMessageEvent):
-        """查询当前IP的归属地"""
-        try:
-            # 获取客户端IP
-            client_ip = self._get_client_ip(event)
-            
-            yield event.plain_result("🔍 正在查询您的IP信息...")
-            
-            info = await self._query_ip_info(client_ip)
-            
-            if info:
-                result = (
-                    f"📍 您的IP：{info['ip']}\n"
-                    f"🏳️ 国家：{info['country']}\n"
-                    f"🗺️ 地区：{info['region']}\n"
-                    f"🏙️ 城市：{info['city']}\n"
-                    f"🏢 ISP：{info['isp']}\n"
-                    f"📍 坐标：{info['lat']}, {info['lon']}\n"
-                    f"🕐 时区：{info['timezone']}"
-                )
-                yield event.plain_result(result)
-            else:
-                yield event.plain_result("❌ 查询失败，请稍后重试")
-                
-        except Exception as e:
-            logger.error(f"查询我的IP异常: {e}")
-            yield event.plain_result("❌ 查询时出现错误")
+
 
     @ip_group.command("状态")
     async def check_plugin_status(self, event: AstrMessageEvent):

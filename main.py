@@ -48,9 +48,12 @@ class IPLookupPlugin(Star):
 
     async def _query_ip_info(self, ip: str) -> Optional[Dict[str, Any]]:
         """查询IP信息"""
+        import urllib.parse
+        encoded_ip = urllib.parse.quote(ip, safe='')
+        
         try:
             # 52vmy.cn API
-            url = f"https://api.52vmy.cn/api/query/itad/pro?ip={ip}"
+            url = f"https://api.52vmy.cn/api/query/itad/pro?ip={encoded_ip}"
             async with self.session.get(url) as response:
                 if response.status == 200:
                     result = await response.json()
@@ -68,7 +71,7 @@ class IPLookupPlugin(Star):
                         }
 
             # vvhan.com API
-            url = f"https://api.vvhan.com/api/ipInfo?ip={ip}"
+            url = f"https://api.vvhan.com/api/ipInfo?ip={encoded_ip}"
             async with self.session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
@@ -96,17 +99,17 @@ class IPLookupPlugin(Star):
 
 
 
-    @filter.regex(r"^ip\s+([\d.:a-fA-F]+)")
+    @filter.regex(r"^ip\s+([\da-fA-F:.]+)")
     async def query_ip(self, event: AstrMessageEvent):
         """查询指定IP的归属地"""
         try:
             # 从消息内容中提取IP地址
             import re
-            match = re.match(r"^ip\s+([\d.:a-fA-F]+)", str(event.get_messages()[0]))
+            match = re.match(r"^ip\s+([\da-fA-F:.]+)$", str(event.get_messages()[0]))
             if not match:
                 yield event.plain_result("❌ 请输入有效的IP地址格式: ip [IP地址]")
                 return
-            ip = match.group(1)
+            ip = match.group(1).strip()
             
             # 验证IP格式（支持IPv4和IPv6）
             if not self._is_valid_ip(ip):

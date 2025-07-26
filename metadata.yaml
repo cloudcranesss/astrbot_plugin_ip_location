@@ -16,7 +16,7 @@ metadata:
   description: 查询IP地址的地理位置信息，支持多API备份查询
   version: 1.0.0
   author: cloudcranesss
-  homepage: https://github.com/cloudcranesss/astrbot_plugin_ip_lookup
+  homepage: https://github.com/cloudcranesss/astrbot_plugin_ip_location
   help: |
     使用命令：
     ip 查询 [IP地址] - 查询指定IP的归属地

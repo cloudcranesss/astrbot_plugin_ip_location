@@ -63,7 +63,7 @@ class IPLookupPlugin(Star):
                             "ip": ip,
                             "country": data.get("country", "未知"),
                             "region": data.get("data", {}).get("province", "未知"),
-                            "city": data.get("data", {}).get("city", "未知"),
+                            "city": data.get("data", {}).get("add", "未知"),
                             "isp": data.get("isp", "未知"),
                             "lat": float(data.get("latitude", 0)),
                             "lon": float(data.get("longitude", 0))

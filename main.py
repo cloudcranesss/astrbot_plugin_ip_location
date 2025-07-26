@@ -156,7 +156,7 @@ class IPLookupPlugin(Star):
             f"API数量: {len(self.api_urls)}\n"
             f"会话状态: {'活跃' if not self.session.closed else '已关闭'}\n"
             f"超时设置: {self.timeout.total}秒\n"
-            f"支持命令: ip 查询, ip 我的, ip 状态"
+            f"支持命令: ip 查询, ip 状态"
         )
         yield event.plain_result(status)
 

@@ -99,16 +99,18 @@ class IPLookupPlugin(Star):
 
 
 
-    @filter.regex(r"^ip\s+((?:(?:\d{1,3}\.){3}\d{1,3})|(?:[\da-fA-F]{0,4}:){2,7}[\da-fA-F]{0,4})")
+    @filter.regex(r"(?i)ip\s+([\d.:a-fA-F]+)")
     async def query_ip(self, event: AstrMessageEvent):
         """查询指定IP的归属地"""
         try:
             # 从消息内容中提取IP地址
             import re
-            pattern = r"^ip\s+((?:(?:\d{1,3}\.){3}\d{1,3})|(?:[\da-fA-F]{0,4}:){2,7}[\da-fA-F]{0,4})"
+            pattern = r"(?i)ip\s+([\d.:a-fA-F]+)"
             messages = event.get_messages()
             key_command = str(messages[0])
-            match = re.search(pattern,key_command)
+            logger.info(f"key_command: {key_command}")
+            match = re.search(pattern, key_command, re.IGNORECASE)
+            logger.info(f"match: {match}")
             if not match:
                 yield event.plain_result("❌ 请输入有效的IP地址格式: ip [IP地址]")
                 return
